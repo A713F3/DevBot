@@ -6,6 +6,9 @@ load_dotenv('TOKEN.env')
 
 client = discord.Client()
 
+def low(str):
+    return str.lower()
+
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
@@ -15,12 +18,12 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('&'):
+    if message.content.startswith('>'):
         commands = str(message.content)[1:]
         parsed = commands.split(" ")
 
-        command = parsed[0]
-        arguments = parsed[1:]
+        command = low(parsed[0])
+        arguments = list(map(low, parsed[1:]))
 
         print(f"\nAUTHOR: {message.author}")
         print(f"COMMAND: {command} ")
