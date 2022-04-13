@@ -1,5 +1,8 @@
 import discord
 import os
+from dotenv import load_dotenv
+
+load_dotenv('TOKEN.env')
 
 client = discord.Client()
 
@@ -11,8 +14,22 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-    
-    if message.content.startswith('&hello'):
-        await message.channel.send('Hello, World!')
 
-client.run(os.getenv('TOKEN'))
+    if message.content.startswith('&'):
+        commands = str(message.content)[1:]
+        parsed = commands.split(" ")
+
+        command = parsed[0]
+        arguments = parsed[1:]
+
+        print(f"\nAUTHOR: {message.author}")
+        print(f"COMMAND: {command} ")
+        print(f"ARGUMENTS: {arguments}")
+        
+
+        if (command == "hello"):
+            author = str(message.author).split("#")
+            await message.channel.send(f'Hello, {author[0]}')
+        
+
+client.run(os.environ['TOKEN'])
