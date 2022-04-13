@@ -1,13 +1,15 @@
 import discord
+from discord.ext import commands
 import os
 from dotenv import load_dotenv
 from libraryhelp import *
 
 load_dotenv('TOKEN.env')
 
-client = discord.Client()
+bot_prefix = '&'
+client = commands.Bot(command_prefix=bot_prefix)
+client.remove_command("help")
 
-bot_command = '&'
 bot_commands = {
     "help":" => Show commands.", 
     "hello":" => Greets user", 
@@ -22,45 +24,33 @@ def low(str):
 async def on_ready():
     print("We have logged in as {0.user}".format(client))
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
+@client.command()
+async def help(ctx):
+    await ctx.send(f"```{help_message}```")
+
+@client.command()
+async def hello(ctx):
+    author = str(ctx.author).split("#")
+    await ctx.send(f"Hello, {author[0]}")
+
+@client.command()
+async def info(ctx, language = None, library = None):
+    if language == None or library == None:
+        await ctx.send(f"**Language and library argument needed!**")
         return
 
-    if message.content.startswith(bot_command):
-        commands = str(message.content)[1:]
-        parsed = commands.split(" ")
+    language = language.lower()
+    library = library.lower()
 
-        command = low(parsed[0])
-        arguments = list(map(low, parsed[1:]))
+    if language == "-c":
+        await ctx.send(f"> **{library}:** \n```{libraries_c[library]}```")
+    else:
+        await ctx.send(f"**Language not supported**,\nSupported languages => {language_list}")
 
-        if command not in bot_commands.keys():
-            await message.channel.send(f"Invalid command, use {bot_command}help command for help.")
-            return 
-
-        print(f"\nAUTHOR: {message.author}")
-        print(f"COMMAND: {command}")
-        print(f"ARGUMENTS: {arguments}")
-        
-        if command == "help":
-            await message.channel.send(f"> Command List:\n```{help_message}```")
-            
-        if command == "hello":
-            author = str(message.author).split("#")
-            await message.channel.send(f"Hello, {author[0]}")
-
-        if command == "info":
-            if len(arguments) < 2:
-                await message.channel.send(f"Language and library argument needed!")
-                return
-            
-            if arguments[0] == "-c":
-                await message.channel.send(f"> **{arguments[1]}:** \n```{libraries_c[arguments[1]]}```")
-            else:
-                await message.channel.send(f"**Language not supported**,\nSupported languages => {language_list}")
-            
-            
-
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send(f"**Invalid command**, use {bot_prefix}help command for help.")
 
 
 client.run(os.environ["TOKEN"])
