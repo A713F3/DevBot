@@ -17,6 +17,9 @@ bot_commands = {
     }
 help_message = "\n".join([c + bot_commands[c] for c in bot_commands.keys()])
 
+
+
+
 def low(str):
     return str.lower()
 
@@ -47,6 +50,20 @@ async def info(ctx, language = None, library = None):
         await ctx.send(f"> **{library}:** \n```{libraries_c[library]}```")
     else:
         await ctx.send(f"**Language not supported**,\nSupported languages => {language_list}")
+
+@client.command()
+async def github(ctx, account):
+    author = str(ctx.author).split("#")
+    github_channel = client.get_channel(963523231917146212)
+
+    await github_channel.send(f"[{author[0]}](https://github.com/{account})")
+
+@client.command()
+async def linkedin(ctx, link):
+    author = str(ctx.author).split("#")
+    github_channel = client.get_channel(963523353136738305)
+    
+    await github_channel.send(f"[{author[0]}]({link})")
 
 @client.event
 async def on_command_error(ctx, error):
