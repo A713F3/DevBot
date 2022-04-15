@@ -66,7 +66,7 @@ async def github(ctx, action = None, account = None):
         await ctx.send(f"**Please add an action for command!**")
         return
 
-    if action == "add":
+    elif action == "add":
         for msg in messages:
             if author[0] in str(msg.content):
                 await msg.delete()
@@ -76,16 +76,19 @@ async def github(ctx, action = None, account = None):
         sent = await github_channel.send(f"[{author[0]}](https://github.com/{account})")
         await ctx.send("**Github account successfully added!**")
 
-    if action == "del":
+    elif action == "del":
         for msg in messages:
             if author[0] in str(msg.content):
                 await ctx.send("**Github account successfully deleted!**")
                 await msg.delete()
                 return 
-    
+
+    else:
+        await ctx.send("**Unknown command**")
+        return
 
 @client.command()
-async def linkedin(ctx, action, link):
+async def linkedin(ctx, action = None, link = None):
     author = str(ctx.author).split("#")
     # 963523353136738305 // main server id
     linkedin_channel = client.get_channel(963523353136738305)
@@ -96,7 +99,7 @@ async def linkedin(ctx, action, link):
         await ctx.send(f"**Please add an action for command!**")
         return
 
-    if action == "add":
+    elif action == "add":
         for msg in messages:
             if author[0] in str(msg.content):
                 await msg.delete()
@@ -106,12 +109,16 @@ async def linkedin(ctx, action, link):
         sent = await linkedin_channel.send(f"[{author[0]}]({link}")
         await ctx.send("**LinkedIn account successfully added!**")
 
-    if action == "del":
+    elif action == "del":
         for msg in messages:
             if author[0] in str(msg.content):
                 await ctx.send("**LinkedIn account successfully deleted!**")
                 await msg.delete()
                 return 
+    
+    else:
+        await ctx.send("**Unknown command**")
+        return
 
 @client.event
 async def on_command_error(ctx, error):
