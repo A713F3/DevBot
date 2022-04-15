@@ -17,6 +17,9 @@ bot_commands = {
     }
 help_message = "\n".join([c + bot_commands[c] for c in bot_commands.keys()])
 
+github_profiles = {}
+linkedin_profiles = {}
+
 
 
 
@@ -52,18 +55,63 @@ async def info(ctx, language = None, library = None):
         await ctx.send(f"**Language not supported**,\nSupported languages => {language_list}")
 
 @client.command()
-async def github(ctx, account):
+async def github(ctx, action = None, account = None):
     author = str(ctx.author).split("#")
+    # 963523231917146212 // main server id
     github_channel = client.get_channel(963523231917146212)
 
-    await github_channel.send(f"[{author[0]}](https://github.com/{account})")
+    messages = await github_channel.history(limit=200).flatten()
+
+    if action == None:
+        await ctx.send(f"**Please add an action for command!**")
+        return
+
+    if action == "add":
+        for msg in messages:
+            if author[0] in str(msg.content):
+                await msg.delete()
+                await ctx.send("**You already have a github account.**")
+                return
+        
+        sent = await github_channel.send(f"[{author[0]}](https://github.com/{account})")
+        await ctx.send("**Github account successfully added!**")
+
+    if action == "del":
+        for msg in messages:
+            if author[0] in str(msg.content):
+                await ctx.send("**Github account successfully deleted!**")
+                await msg.delete()
+                return 
+    
 
 @client.command()
-async def linkedin(ctx, link):
+async def linkedin(ctx, action, link):
     author = str(ctx.author).split("#")
-    github_channel = client.get_channel(963523353136738305)
-    
-    await github_channel.send(f"[{author[0]}]({link})")
+    # 963523353136738305 // main server id
+    linkedin_channel = client.get_channel(963523353136738305)
+
+    messages = await linkedin_channel.history(limit=200).flatten()
+
+    if action == None:
+        await ctx.send(f"**Please add an action for command!**")
+        return
+
+    if action == "add":
+        for msg in messages:
+            if author[0] in str(msg.content):
+                await msg.delete()
+                await ctx.send("**You already have a LinkedIn account.**")
+                return
+        
+        sent = await linkedin_channel.send(f"[{author[0]}]({link}")
+        await ctx.send("**LinkedIn account successfully added!**")
+
+    if action == "del":
+        for msg in messages:
+            if author[0] in str(msg.content):
+                await ctx.send("**LinkedIn account successfully deleted!**")
+                await msg.delete()
+                return 
 
 @client.event
 async def on_command_error(ctx, error):
