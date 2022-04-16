@@ -120,6 +120,13 @@ async def linkedin(ctx, action = None, link = None):
         await ctx.send("**Unknown command**")
         return
 
+
+@client.event
+async def on_member_join(member):
+    # 963517870044749907 // welcome channel id
+    welcome_channel = client.get_channel(963517870044749907)
+    await welcome_channel.send(f"Welcome, {member.mention}!")
+
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
