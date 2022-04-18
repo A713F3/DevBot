@@ -150,7 +150,11 @@ async def linkedin(ctx, action = None, link = None):
 
 @client.command()
 async def role(ctx):
-    message = await ctx.send(":snake: is Python and :regional_indicator_c: is C")
+    role_embed = discord.Embed(title="To enter the server please state your roles:", description=":mag_right: **Hint:** React to this message.", color=0x000006)
+    role_embed.add_field(name=":snake: - Python  :regional_indicator_c: - C", value="(Multiple choice is available)")
+    role_embed.set_image(url="https://github.com/A713F3/DevBot/blob/master/devbot.png?raw=true")
+
+    message = await ctx.send(embed=role_embed)
 
     await message.add_reaction(PYTHON_REACTION)
     await message.add_reaction(C_REACTION)
