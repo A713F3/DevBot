@@ -3,24 +3,26 @@ from discord.ext import commands
 import os
 from dotenv import load_dotenv
 from libraryhelp import *
-import embeds_messages
 
 """
     CONSTANTS
 """
 load_dotenv('TOKEN.env')
 
-GITHUB_CHANNEL = client.get_channel(963523231917146212)
-LINKEDIN_CHANNEL = client.get_channel(963523353136738305)
-WELCOME_CHANNEL = client.get_channel(963517870044749907)
-
 BOT_PREFIX = '&'
+intents = discord.Intents.all()
+client = commands.Bot(command_prefix=BOT_PREFIX, intents=intents)
+
+GITHUB_ID = 963523231917146212
+LINKEDIN_ID = 963523353136738305
+WELCOME_ID = 963517870044749907
+TEST_ID = 963536301762678797
+
+PYTHON_REACTION = "🐍"
+C_REACTION = "🇨"
 """
     CONSTANTS
 """
-
-
-client = commands.Bot(command_prefix=BOT_PREFIX)
 client.remove_command("help")
 
 @client.event
@@ -33,7 +35,15 @@ async def on_ready():
 """
 @client.command()
 async def help(ctx):
-    help_message = help_embed()
+    help_message = discord.Embed(title="How to use the DevBot :question:", description="- Useful Commands :rocket:-", color=0x000006)
+    help_message.add_field(name="&help", value="- Display all commands")
+    help_message.add_field(name="&hello", value="- Says hello to the user")
+    help_message.add_field(name="&github add (username)", value="- Adds Github profile to accounts channel")
+    help_message.add_field(name="&github del", value="- Deletes Github profile from accounts channel")
+    help_message.add_field(name="&linkedin add (account link)", value="- Adds LinkedIn profile to accounts channel")
+    help_message.add_field(name="&linkedin del", value="- Deletes LinkedIn profile from accounts channel")
+    help_message.set_image(url="https://github.com/A713F3/DevBot/blob/master/devbot.png?raw=true")
+
     await ctx.send(embed = help_message)
 
 
@@ -71,6 +81,8 @@ async def info(ctx, language = None, library = None):
 async def github(ctx, action = None, account = None):
     author = str(ctx.author.name)
 
+    GITHUB_CHANNEL = client.get_channel(GITHUB_ID)
+
     messages = await GITHUB_CHANNEl.history(limit=200).flatten()
 
     if action == None:
@@ -107,6 +119,8 @@ async def github(ctx, action = None, account = None):
 async def linkedin(ctx, action = None, link = None):
     author = str(ctx.author.name)
 
+    LINKED_CHANNEL = client.get_channel(LINKEDIN_ID)
+
     messages = await LINKEDIN_CHANNEL.history(limit=200).flatten()
 
     if action == None:
@@ -134,6 +148,13 @@ async def linkedin(ctx, action = None, link = None):
         await ctx.send("**Unknown command**")
         return
 
+@client.command()
+async def role(ctx):
+    message = await ctx.send(":snake: is Python and :regional_indicator_c: is C")
+
+    await message.add_reaction(PYTHON_REACTION)
+    await message.add_reaction(C_REACTION)
+
 
 """
     Welcome => test welcome
@@ -142,13 +163,43 @@ async def linkedin(ctx, action = None, link = None):
 async def welcome(ctx):
     member = ctx.author
 
-    welcome_message = welcome_embed()
-    
+    welcome_message = discord.Embed(title=":coffee: Grab a cup of coffee and start coding...", description=":mag_right: **Hint:** try &help", color=0x000006)    
     await ctx.send(f"Welcome, {member.mention}", embed = welcome_message)
+
+
+@client.event
+async def on_reaction_add(reaction, user):
+    if reaction.message.channel.id != WELCOME_ID:
+        return
+    
+    if reaction.emoji == PYTHON_REACTION:
+        python_role = discord.utils.get(user.guild.roles, name="Python")
+        await user.add_roles(python_role)
+
+    if reaction.emoji == C_REACTION:
+        c_role = discord.utils.get(user.guild.roles, name="C")
+        await user.add_roles(c_role)
+
+
+@client.event
+async def on_reaction_remove(reaction, user):
+    if reaction.message.channel.id != WELCOME_ID:
+        return
+
+    if reaction.emoji == PYTHON_REACTION:
+        python_role = discord.utils.get(user.guild.roles, name="Python")
+        await user.remove_roles(python_role)
+
+    if reaction.emoji == C_REACTION:
+        c_role = discord.utils.get(user.guild.roles, name="C")
+        await user.remove_roles(c_role)
+
 
 @client.event
 async def on_member_join(member):
-    welcome_message = welcome_embed()
+    WELCOME_CHANNEL = client.get_channel(WELCOME_ID)
+
+    welcome_message = discord.Embed(title=":coffee: Grab a cup of coffee and start coding...", description=":mag_right: **Hint:** try &help", color=0x000006)
 
     await WELCOME_CHANNEL.send(f"Welcome, {member.mention}", embed = welcome_message)
 
