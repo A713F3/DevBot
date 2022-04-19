@@ -16,10 +16,16 @@ client = commands.Bot(command_prefix=BOT_PREFIX, intents=intents)
 GITHUB_ID = 963523231917146212
 LINKEDIN_ID = 963523353136738305
 WELCOME_ID = 963517870044749907
+ROLES_ID = 965952759918632980
 TEST_ID = 963536301762678797
+
+REACTION_ID = ROLES_ID
 
 PYTHON_REACTION = "🐍"
 C_REACTION = "🇨"
+
+PYTHON_ROLE_NAME = "python"
+C_ROLE_NAME = "C"
 """
     CONSTANTS
 """
@@ -150,11 +156,13 @@ async def linkedin(ctx, action = None, link = None):
 
 @client.command()
 async def role(ctx):
+    ROLES_CHANNEL = client.get_channel(REACTION_ID)
+
     role_embed = discord.Embed(title="To enter the server please state your roles:", description=":mag_right: **Hint:** React to this message.", color=0x000006)
     role_embed.add_field(name=":snake: - Python  :regional_indicator_c: - C", value="(Multiple choice is available)")
     role_embed.set_image(url="https://github.com/A713F3/DevBot/blob/master/devbot.png?raw=true")
 
-    message = await ctx.send(embed=role_embed)
+    message = await ROLES_CHANNEL.send(embed=role_embed)
 
     await message.add_reaction(PYTHON_REACTION)
     await message.add_reaction(C_REACTION)
@@ -173,30 +181,39 @@ async def welcome(ctx):
 
 @client.event
 async def on_reaction_add(reaction, user):
-    if reaction.message.channel.id != WELCOME_ID:
+    print("add girdi")
+    if reaction.message.channel.id != REACTION_ID:
         return
     
     if reaction.emoji == PYTHON_REACTION:
-        python_role = discord.utils.get(user.guild.roles, name="Python")
+        python_role = discord.utils.get(user.guild.roles, name=PYTHON_ROLE_NAME)
         await user.add_roles(python_role)
 
+
     if reaction.emoji == C_REACTION:
-        c_role = discord.utils.get(user.guild.roles, name="C")
+        c_role = discord.utils.get(user.guild.roles, name=C_ROLE_NAME)
         await user.add_roles(c_role)
 
 
 @client.event
 async def on_reaction_remove(reaction, user):
-    if reaction.message.channel.id != WELCOME_ID:
+    print("remove girdi")
+    if reaction.message.channel.id != REACTION_ID:
         return
 
     if reaction.emoji == PYTHON_REACTION:
-        python_role = discord.utils.get(user.guild.roles, name="Python")
-        await user.remove_roles(python_role)
+        python_role = discord.utils.get(user.guild.roles, name=PYTHON_ROLE_NAME)
+        try:
+            await user.remove_roles(python_role)
+        except:
+            pass
 
     if reaction.emoji == C_REACTION:
-        c_role = discord.utils.get(user.guild.roles, name="C")
-        await user.remove_roles(c_role)
+        c_role = discord.utils.get(user.guild.roles, name=C_ROLE_NAME)
+        try:
+            await user.remove_roles(c_role)
+        except:
+            pass
 
 
 @client.event
