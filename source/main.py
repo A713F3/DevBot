@@ -181,7 +181,6 @@ async def welcome(ctx):
 
 @client.event
 async def on_reaction_add(reaction, user):
-    print("add girdi")
     if reaction.message.channel.id != REACTION_ID:
         return
     
@@ -197,7 +196,6 @@ async def on_reaction_add(reaction, user):
 
 @client.event
 async def on_reaction_remove(reaction, user):
-    print("remove girdi")
     if reaction.message.channel.id != REACTION_ID:
         return
 
