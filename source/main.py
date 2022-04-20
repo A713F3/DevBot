@@ -44,6 +44,10 @@ DEVBOT_IMAGE = "https://raw.githubusercontent.com/A713F3/DevBot/master/images/de
 DEVBOT_HELP_IMAGE = "https://raw.githubusercontent.com/A713F3/DevBot/master/images/devbot_help_img.png"
 
 GITHUB_PP_API = "https://avatars.githubusercontent.com/"
+
+SUCCESS_COLOR = 0x198754
+FAIL_COLOR = 0xfc100d
+BLACK_COLOR = 0x000006
 """
     CONSTANTS
 """
@@ -59,7 +63,7 @@ async def on_ready():
 """
 @client.command()
 async def help(ctx):
-    help_message = discord.Embed(title="How to use the DevBot :question:", description="- Useful Commands :rocket:-", color=0x000006)
+    help_message = discord.Embed(title="How to use the DevBot :question:", description="- Useful Commands :rocket:-", color=BLACK_COLOR)
     help_message.add_field(name="&help", value="- Display all commands")
     help_message.add_field(name="&hello", value="- Says hello to the user")
     help_message.add_field(name="&github add (username)", value="- Adds Github profile to accounts channel")
@@ -110,32 +114,42 @@ async def github(ctx, action = None, account = None):
     messages = await GITHUB_CHANNEL.history(limit=200).flatten()
     
     if action == None:
-        await ctx.send(f"**Please add an action for command!**")
+        fail = discord.Embed(title="Please add an action for command!", description=f"**Try:** {BOT_PREFIX}help", color=FAIL_COLOR)
+        await ctx.send(embed=fail)
         return
 
     elif action == "add":
         if account == None:
-            await ctx.send(f"**Please add an account!**")
+            fail = discord.Embed(title="Please add an account!", description=f"**Try:** {BOT_PREFIX}help", color=FAIL_COLOR)
+            await ctx.send(embed=fail)
             return 
 
         for msg in messages:
             if author in str(msg.content):
-                await ctx.send("**You already have a github account.**")
+                fail = discord.Embed(title="You already have a Github account.", description=f":mag_right: Github channel", color=FAIL_COLOR)
+                await ctx.send(embed=fail)
                 return
         
         await GITHUB_CHANNEL.send(f"[{ctx.author.mention}](https://github.com/{account})")
-        await ctx.send("**Github account successfully added!**")
+        
+        success_add = discord.Embed(title="Github account successfully added!", description=":mag_right: Github channel", color=SUCCESS_COLOR)
+        
+        await ctx.send(embed=success_add)
 
     elif action == "del":
         for msg in messages:
             if author in str(msg.content):
-                await ctx.send("**Github account successfully deleted!**")
+                success_del = discord.Embed(title="Github account successfully deleted!", description=":mag_right: Github channel", color=SUCCESS_COLOR)
+                await ctx.send(embed=success_del)
                 await msg.delete()
                 return 
-        await ctx.send("**You don't have a Github account!**")
+        
+        fail_del = discord.Embed(title="You don't have a Github account!", description=":mag_right: Github channel", color=FAIL_COLOR)
+        await ctx.send(embed=fail_del)
 
     else:
-        await ctx.send("**Unknown command**")
+        fail = discord.Embed(title="Unknown command", description=f"**Try:** {BOT_PREFIX}help", color=FAIL_COLOR)
+        await ctx.send(embed=fail)
         return
 
 """
@@ -150,34 +164,44 @@ async def linkedin(ctx, action = None, link = None):
     LINKEDIN_CHANNEL = client.get_channel(LINKEDIN_ID)
 
     messages = await LINKEDIN_CHANNEL.history(limit=200).flatten()
-
+    
     if action == None:
-        await ctx.send(f"**Please add an action for command!**")
+        fail = discord.Embed(title="Please add an action for command!", description=f"**Try:** {BOT_PREFIX}help", color=FAIL_COLOR)
+        await ctx.send(embed=fail)
         return
 
     elif action == "add":
         if link == None:
-            await ctx.send(f"**Please add an account!**")
+            fail = discord.Embed(title="Please add an account!", description=f"**Try:** {BOT_PREFIX}help", color=FAIL_COLOR)
+            await ctx.send(embed=fail)
             return 
 
         for msg in messages:
             if author in str(msg.content):
-                await ctx.send("**You already have a LinkedIn account.**")
+                fail = discord.Embed(title="You already have a LinkedIn account.", description=f":mag_right: LinkedIn channel", color=FAIL_COLOR)
+                await ctx.send(embed=fail)
                 return
         
-        sent = await LINKEDIN_CHANNEL.send(f"[{ctx.author.mention}]({link}")
-        await ctx.send("**LinkedIn account successfully added!**")
+        await LINKEDIN_CHANNEL.send(f"[{ctx.author.mention}]({link})")
+        
+        success_add = discord.Embed(title="LinkedIn account successfully added!", description=":mag_right: LinkedIn channel", color=SUCCESS_COLOR)
+        
+        await ctx.send(embed=success_add)
 
     elif action == "del":
         for msg in messages:
             if author in str(msg.content):
-                await ctx.send("**LinkedIn account successfully deleted!**")
+                success_del = discord.Embed(title="LinkedIn account successfully deleted!", description=":mag_right: LinkedIn channel", color=SUCCESS_COLOR)
+                await ctx.send(embed=success_del)
                 await msg.delete()
                 return 
-        await ctx.send("**You don't have a LinkedIn account!**")
-    
+        
+        fail_del = discord.Embed(title="You don't have a LinkedIn account!", description=":mag_right: LinkedIn channel", color=FAIL_COLOR)
+        await ctx.send(embed=fail_del)
+
     else:
-        await ctx.send("**Unknown command**")
+        fail = discord.Embed(title="Unknown command", description=f"**Try:** {BOT_PREFIX}help", color=FAIL_COLOR)
+        await ctx.send(embed=fail)
         return
 
 @client.command()
@@ -186,7 +210,7 @@ async def role(ctx):
 
     labels = f"{PYTHON_REACTION}-Python {C_REACTION}-C/C++ {JAVA_REACTION}-Java {JS_REACTION}-JavaScript {KOTLIN_REACTION}-Kotlin"
 
-    role_embed = discord.Embed(title="To enter the server please state your roles:", description=":mag_right: **Hint:** React to this message.", color=0x000006)
+    role_embed = discord.Embed(title="To enter the server please state your roles:", description=":mag_right: **Hint:** React to this message.", color=BLACK_COLOR)
     role_embed.add_field(name=labels, value="(Multiple choice is available)")
     role_embed.set_image(url=DEVBOT_IMAGE)
 
@@ -203,7 +227,7 @@ async def role(ctx):
 async def welcome(ctx):
     member = ctx.author
 
-    welcome_message = discord.Embed(title=":coffee: Grab a cup of coffee and start coding...", description=":mag_right: **Hint:** try &help", color=0x000006)    
+    welcome_message = discord.Embed(title=":coffee: Grab a cup of coffee and start coding...", description=":mag_right: **Hint:** try &help", color=BLACK_COLOR)    
     await ctx.send(f"Welcome, {member.mention}", embed = welcome_message)
 
 
@@ -237,7 +261,7 @@ async def on_reaction_remove(reaction, user):
 async def on_member_join(member):
     WELCOME_CHANNEL = client.get_channel(WELCOME_ID)
 
-    welcome_message = discord.Embed(title=":coffee: Grab a cup of coffee and start coding...", description=":mag_right: **Hint:** try &help", color=0x000006)
+    welcome_message = discord.Embed(title=":coffee: Grab a cup of coffee and start coding...", description=":mag_right: **Hint:** try &help", color=BLACK_COLOR)
 
     await WELCOME_CHANNEL.send(f"Welcome, {member.mention}", embed = welcome_message)
 
