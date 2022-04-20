@@ -40,6 +40,9 @@ REACTIONS ={PYTHON_REACTION : PYTHON_ROLE_NAME,
             JS_REACTION     : JS_ROLE_NAME
             }
 
+DEVBOT_IMAGE = "https://github.com/A713F3/DevBot/blob/master/images/devbot.png?raw=true"
+DEVBOT_HELP_IMAGE = "https://github.com/A713F3/DevBot/blob/master/images/devbot_help.png?raw=true"
+
 """
     CONSTANTS
 """
@@ -62,7 +65,7 @@ async def help(ctx):
     help_message.add_field(name="&github del", value="- Deletes Github profile from accounts channel")
     help_message.add_field(name="&linkedin add (account link)", value="- Adds LinkedIn profile to accounts channel")
     help_message.add_field(name="&linkedin del", value="- Deletes LinkedIn profile from accounts channel")
-    help_message.set_image(url="https://github.com/A713F3/DevBot/blob/master/devbot.png?raw=true")
+    help_message.set_image(url=DEVBOT_HELP_IMAGE)
 
     await ctx.send(embed = help_message)
 
@@ -176,7 +179,7 @@ async def role(ctx):
 
     role_embed = discord.Embed(title="To enter the server please state your roles:", description=":mag_right: **Hint:** React to this message.", color=0x000006)
     role_embed.add_field(name=labels, value="(Multiple choice is available)")
-    role_embed.set_image(url="https://github.com/A713F3/DevBot/blob/master/devbot.png?raw=true")
+    role_embed.set_image(url=DEVBOT_IMAGE)
 
     message = await ROLES_CHANNEL.send(embed=role_embed)
 
