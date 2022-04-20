@@ -40,8 +40,8 @@ REACTIONS ={PYTHON_REACTION : PYTHON_ROLE_NAME,
             JS_REACTION     : JS_ROLE_NAME
             }
 
-DEVBOT_IMAGE = "https://github.com/A713F3/DevBot/blob/master/images/devbot.png?raw=true"
-DEVBOT_HELP_IMAGE = "https://github.com/A713F3/DevBot/blob/master/images/devbot_help.png?raw=true"
+DEVBOT_IMAGE = "https://raw.githubusercontent.com/A713F3/DevBot/master/images/devbot_img.png"
+DEVBOT_HELP_IMAGE = "https://raw.githubusercontent.com/A713F3/DevBot/master/images/devbot_help_img.png"
 
 GITHUB_PP_API = "https://avatars.githubusercontent.com/"
 """
@@ -66,7 +66,7 @@ async def help(ctx):
     help_message.add_field(name="&github del", value="- Deletes Github profile from accounts channel")
     help_message.add_field(name="&linkedin add (account link)", value="- Adds LinkedIn profile to accounts channel")
     help_message.add_field(name="&linkedin del", value="- Deletes LinkedIn profile from accounts channel")
-    help_message.set_image(url=DEVBOT_HELP_IMAGE)
+    help_message.set_thumbnail(url=DEVBOT_HELP_IMAGE)
 
     await ctx.send(embed = help_message)
 
@@ -108,11 +108,10 @@ async def github(ctx, action = None, account = None):
     GITHUB_CHANNEL = client.get_channel(GITHUB_ID)
 
     messages = await GITHUB_CHANNEl.history(limit=200).flatten()
-
+    
     if action == None:
         await ctx.send(f"**Please add an action for command!**")
         return
-
     elif action == "add":
         if account == None:
             ctx.send(f"**Please add an account!**")
@@ -177,7 +176,7 @@ async def linkedin(ctx, action = None, link = None):
         if link == None:
             ctx.send(f"**Please add an account!**")
             return
-            
+
         for msg in messages:
             if author in str(msg.content):
                 await ctx.send("**LinkedIn account successfully deleted!**")
