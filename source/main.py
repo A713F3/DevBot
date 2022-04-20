@@ -43,6 +43,7 @@ REACTIONS ={PYTHON_REACTION : PYTHON_ROLE_NAME,
 DEVBOT_IMAGE = "https://github.com/A713F3/DevBot/blob/master/images/devbot.png?raw=true"
 DEVBOT_HELP_IMAGE = "https://github.com/A713F3/DevBot/blob/master/images/devbot_help.png?raw=true"
 
+GITHUB_PP_API = "https://avatars.githubusercontent.com/"
 """
     CONSTANTS
 """
@@ -113,6 +114,10 @@ async def github(ctx, action = None, account = None):
         return
 
     elif action == "add":
+        if account == None:
+            ctx.send(f"**Please add an account!**")
+            return 
+
         for msg in messages:
             if author in str(msg.content):
                 await msg.delete()
@@ -123,6 +128,10 @@ async def github(ctx, action = None, account = None):
         await ctx.send("**Github account successfully added!**")
 
     elif action == "del":
+        if account == None:
+            ctx.send(f"**Please add an account!**")
+            return 
+
         for msg in messages:
             if author in str(msg.content):
                 await ctx.send("**Github account successfully deleted!**")
@@ -151,6 +160,10 @@ async def linkedin(ctx, action = None, link = None):
         return
 
     elif action == "add":
+        if link == None:
+            ctx.send(f"**Please add an account!**")
+            return 
+
         for msg in messages:
             if author in str(msg.content):
                 await msg.delete()
@@ -161,6 +174,10 @@ async def linkedin(ctx, action = None, link = None):
         await ctx.send("**LinkedIn account successfully added!**")
 
     elif action == "del":
+        if link == None:
+            ctx.send(f"**Please add an account!**")
+            return
+            
         for msg in messages:
             if author in str(msg.content):
                 await ctx.send("**LinkedIn account successfully deleted!**")
