@@ -21,11 +21,25 @@ TEST_ID = 963536301762678797
 
 REACTION_ID = ROLES_ID
 
-PYTHON_REACTION = "🐍"
-C_REACTION = "🇨"
+PYTHON_REACTION = "<:phy:965995904391864391>"
+C_REACTION = "<:c_:965996476654301214>"
+JAVA_REACTION = "<:jav:965998639036121091>"
+KOTLIN_REACTION = "<:kot:965997900071047228>"
+JS_REACTION = "<:js:965996881933127759>"
 
-PYTHON_ROLE_NAME = "python"
+PYTHON_ROLE_NAME = "Python"
 C_ROLE_NAME = "C"
+JAVA_ROLE_NAME = "Java"
+KOTLIN_ROLE_NAME = "Kotlin"
+JS_ROLE_NAME = "JavaScript"
+
+REACTIONS ={PYTHON_REACTION : PYTHON_ROLE_NAME, 
+            C_REACTION      : C_ROLE_NAME, 
+            JAVA_REACTION   : JAVA_ROLE_NAME,
+            KOTLIN_REACTION : KOTLIN_ROLE_NAME,
+            JS_REACTION     : JS_ROLE_NAME
+            }
+
 """
     CONSTANTS
 """
@@ -158,14 +172,16 @@ async def linkedin(ctx, action = None, link = None):
 async def role(ctx):
     ROLES_CHANNEL = client.get_channel(REACTION_ID)
 
+    labels = f"{PYTHON_REACTION}-Python {C_REACTION}-C/C++ {JAVA_REACTION}-Java {JS_REACTION}-JavaScript {KOTLIN_REACTION}-Kotlin"
+
     role_embed = discord.Embed(title="To enter the server please state your roles:", description=":mag_right: **Hint:** React to this message.", color=0x000006)
-    role_embed.add_field(name=":snake: - Python  :regional_indicator_c: - C", value="(Multiple choice is available)")
+    role_embed.add_field(name=labels, value="(Multiple choice is available)")
     role_embed.set_image(url="https://github.com/A713F3/DevBot/blob/master/devbot.png?raw=true")
 
     message = await ROLES_CHANNEL.send(embed=role_embed)
 
-    await message.add_reaction(PYTHON_REACTION)
-    await message.add_reaction(C_REACTION)
+    for reaction in REACTIONS.keys():
+        await message.add_reaction(reaction)
 
 
 """
@@ -183,15 +199,13 @@ async def welcome(ctx):
 async def on_reaction_add(reaction, user):
     if reaction.message.channel.id != REACTION_ID:
         return
-    
-    if reaction.emoji == PYTHON_REACTION:
-        python_role = discord.utils.get(user.guild.roles, name=PYTHON_ROLE_NAME)
-        await user.add_roles(python_role)
 
+    if str(reaction.emoji) in REACTIONS.keys():
+        role_name = REACTIONS[str(reaction.emoji)]
 
-    if reaction.emoji == C_REACTION:
-        c_role = discord.utils.get(user.guild.roles, name=C_ROLE_NAME)
-        await user.add_roles(c_role)
+        role = discord.utils.get(user.guild.roles, name=role_name)
+
+        await user.add_roles(role)
 
 
 @client.event
@@ -199,19 +213,12 @@ async def on_reaction_remove(reaction, user):
     if reaction.message.channel.id != REACTION_ID:
         return
 
-    if reaction.emoji == PYTHON_REACTION:
-        python_role = discord.utils.get(user.guild.roles, name=PYTHON_ROLE_NAME)
-        try:
-            await user.remove_roles(python_role)
-        except:
-            pass
+    if str(reaction.emoji) in REACTIONS.keys():
+        role_name = REACTIONS[str(reaction.emoji)]
 
-    if reaction.emoji == C_REACTION:
-        c_role = discord.utils.get(user.guild.roles, name=C_ROLE_NAME)
-        try:
-            await user.remove_roles(c_role)
-        except:
-            pass
+        role = discord.utils.get(user.guild.roles, name=role_name)
+
+        await user.remove_roles(role)
 
 
 @client.event
