@@ -105,7 +105,7 @@ async def info(ctx, language = None, library = None):
 async def github(ctx, action = None, account = None):
     author = str(ctx.author.id)
 
-    GITHUB_CHANNEL = client.get_channel(TEST_ID)
+    GITHUB_CHANNEL = client.get_channel(GITHUB_ID)
 
     messages = await GITHUB_CHANNEL.history(limit=200).flatten()
     
@@ -132,7 +132,7 @@ async def github(ctx, action = None, account = None):
                 await ctx.send("**Github account successfully deleted!**")
                 await msg.delete()
                 return 
-        await ctx.send("**You dont have a Github account!**")
+        await ctx.send("**You don't have a Github account!**")
 
     else:
         await ctx.send("**Unknown command**")
@@ -174,7 +174,7 @@ async def linkedin(ctx, action = None, link = None):
                 await ctx.send("**LinkedIn account successfully deleted!**")
                 await msg.delete()
                 return 
-        await ctx.send("**You dont have a LinkedIn account!**")
+        await ctx.send("**You don't have a LinkedIn account!**")
     
     else:
         await ctx.send("**Unknown command**")
