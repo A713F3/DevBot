@@ -147,7 +147,7 @@ async def github(ctx, action = None, account = None):
 async def linkedin(ctx, action = None, link = None):
     author = str(ctx.author.id)
 
-    LINKED_CHANNEL = client.get_channel(LINKEDIN_ID)
+    LINKEDIN_CHANNEL = client.get_channel(LINKEDIN_ID)
 
     messages = await LINKEDIN_CHANNEL.history(limit=200).flatten()
 
