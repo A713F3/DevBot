@@ -205,6 +205,7 @@ async def linkedin(ctx, action = None, link = None):
         return
 
 @client.command()
+@commands.has_role("Admin")
 async def role(ctx):
     ROLES_CHANNEL = client.get_channel(REACTION_ID)
 
