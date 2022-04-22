@@ -204,6 +204,10 @@ async def linkedin(ctx, action = None, link = None):
         await ctx.send(embed=fail)
         return
 
+
+"""
+    Admin commands
+"""
 @client.command()
 @commands.has_role("Admin")
 async def role(ctx):
@@ -219,6 +223,28 @@ async def role(ctx):
 
     for reaction in REACTIONS.keys():
         await message.add_reaction(reaction)
+
+
+@client.command()
+@commands.has_role("Admin")
+async def rules(ctx):
+    ROLES_CHANNEL = client.get_channel(REACTION_ID)
+
+    rules = discord.Embed(title=":page_facing_up: Rules:", description="General rules of this server.")
+    rules.add_field(name=":handshake: Supportive", value="Be encouraging in your comments. Evaluate the words spoken and the work done in a positive way.")
+    rules.add_field(name=":slight_smile: Respectful", value="Respect every individual. Do not use language or act in a way that hurts or insults anyone. Insults, sexism, racism or hate speech will not be tolerated.")
+    rules.add_field(name=":man_detective: Spam-Free", value="Do not send too many small messages one after the other. Do not interrupt the conversation by sending spam.")
+    rules.add_field(name=":bust_in_silhouette: Follow the Discord Community Guidelines", value="You can find it here: https://discord.com/guidelines")
+
+    await ROLES_CHANNEL.send(embed=rules)
+
+@client.command()
+@commands.has_role("Admin")
+async def clear(ctx, limit=200):
+    await ctx.channel.purge(limit=limit)
+"""
+    Admin commands
+"""
 
 
 """
@@ -269,7 +295,8 @@ async def on_member_join(member):
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        await ctx.send(f"**Invalid command**, use {BOT_PREFIX}help command for help.")
+        error = discord.Embed(title="Invalid command", description=f"**Try:** {BOT_PREFIX}help", color=FAIL_COLOR)
+        await ctx.send(embed=error)
 
 
 client.run(os.environ["TOKEN"])
