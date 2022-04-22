@@ -210,7 +210,7 @@ async def role(ctx):
 
     labels = f"{PYTHON_REACTION}-Python {C_REACTION}-C/C++ {JAVA_REACTION}-Java {JS_REACTION}-JavaScript {KOTLIN_REACTION}-Kotlin"
 
-    role_embed = discord.Embed(title="To enter the server please state your roles:", description=":mag_right: **Hint:** React to this message.", color=BLACK_COLOR)
+    role_embed = discord.Embed(title="Please choose your roles:", description=":mag_right: **Hint:** React to this message.", color=BLACK_COLOR)
     role_embed.add_field(name=labels, value="(Multiple choice is available)")
     role_embed.set_image(url=DEVBOT_IMAGE)
 
