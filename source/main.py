@@ -242,21 +242,18 @@ async def rules(ctx):
 @commands.has_role("Admin")
 async def clear(ctx, limit=200):
     await ctx.channel.purge(limit=limit)
-"""
-    Admin commands
-"""
 
-
-"""
-    Welcome => test welcome
-"""
 @client.command()
+@commands.has_role("Admin")
 async def welcome(ctx):
     member = ctx.author
 
     welcome_message = discord.Embed(title=":coffee: Grab a cup of coffee and start coding...", description=":mag_right: **Hint:** try &help", color=BLACK_COLOR)    
     await ctx.send(f"Welcome, {member.mention}", embed = welcome_message)
 
+"""
+    Admin commands
+"""
 
 @client.event
 async def on_reaction_add(reaction, user):
