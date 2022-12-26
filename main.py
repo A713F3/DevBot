@@ -13,19 +13,19 @@ BOT_PREFIX = '&'
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix=BOT_PREFIX, intents=intents)
 
-GITHUB_ID = 963523231917146212
-LINKEDIN_ID = 963523353136738305
-WELCOME_ID = 963517870044749907
-ROLES_ID = 965952759918632980
-TEST_ID = 966369041310699642
+GITHUB_ID = os.environ["GITHUB_ID"] 
+LINKEDIN_ID = os.environ["LINKEDIN_ID"] 
+WELCOME_ID = os.environ["WELCOME_ID"] 
+ROLES_ID = os.environ["ROLES_ID"] 
+TEST_ID = os.environ["TEST_ID"] 
 
 REACTION_ID = ROLES_ID
 
-PYTHON_REACTION = "<:phy:965995904391864391>"
-C_REACTION = "<:c_:965996476654301214>"
-JAVA_REACTION = "<:jav:965998639036121091>"
-KOTLIN_REACTION = "<:kot:965997900071047228>"
-JS_REACTION = "<:js:965996881933127759>"
+PYTHON_REACTION = os.environ["PYTHON_REACTION"] 
+C_REACTION = os.environ["C_REACTION"] 
+JAVA_REACTION = os.environ["JAVA_REACTION"] 
+KOTLIN_REACTION = os.environ["KOTLIN_REACTION"] 
+JS_REACTION = os.environ["JS_REACTION"] 
 
 PYTHON_ROLE_NAME = "Python"
 C_ROLE_NAME = "C"
@@ -33,8 +33,8 @@ JAVA_ROLE_NAME = "Java"
 KOTLIN_ROLE_NAME = "Kotlin"
 JS_ROLE_NAME = "JavaScript"
 
-REACTIONS ={PYTHON_REACTION : PYTHON_ROLE_NAME, 
-            C_REACTION      : C_ROLE_NAME, 
+REACTIONS ={PYTHON_REACTION : PYTHON_ROLE_NAME,
+            C_REACTION      : C_ROLE_NAME,
             JAVA_REACTION   : JAVA_ROLE_NAME,
             KOTLIN_REACTION : KOTLIN_ROLE_NAME,
             JS_REACTION     : JS_ROLE_NAME
@@ -84,7 +84,7 @@ async def hello(ctx):
     await ctx.send(f"Hello, {author.mention}!")
 
 """
-    Info 
+    Info
 """
 @client.command()
 async def info(ctx, language = None, library = None):
@@ -112,7 +112,7 @@ async def github(ctx, action = None, account = None):
     GITHUB_CHANNEL = client.get_channel(GITHUB_ID)
 
     messages = await GITHUB_CHANNEL.history(limit=200).flatten()
-    
+
     if action == None:
         fail = discord.Embed(title="Please add an action for command!", description=f"**Try:** {BOT_PREFIX}help", color=FAIL_COLOR)
         await ctx.send(embed=fail)
@@ -122,18 +122,18 @@ async def github(ctx, action = None, account = None):
         if account == None:
             fail = discord.Embed(title="Please add an account!", description=f"**Try:** {BOT_PREFIX}help", color=FAIL_COLOR)
             await ctx.send(embed=fail)
-            return 
+            return
 
         for msg in messages:
             if author in str(msg.content):
                 fail = discord.Embed(title="You already have a Github account.", description=f":mag_right: Github channel", color=FAIL_COLOR)
                 await ctx.send(embed=fail)
                 return
-        
+
         await GITHUB_CHANNEL.send(f"[{ctx.author.mention}](https://github.com/{account})")
-        
+
         success_add = discord.Embed(title="Github account successfully added!", description=":mag_right: Github channel", color=SUCCESS_COLOR)
-        
+
         await ctx.send(embed=success_add)
 
     elif action == "del":
@@ -142,8 +142,8 @@ async def github(ctx, action = None, account = None):
                 success_del = discord.Embed(title="Github account successfully deleted!", description=":mag_right: Github channel", color=SUCCESS_COLOR)
                 await ctx.send(embed=success_del)
                 await msg.delete()
-                return 
-        
+                return
+
         fail_del = discord.Embed(title="You don't have a Github account!", description=":mag_right: Github channel", color=FAIL_COLOR)
         await ctx.send(embed=fail_del)
 
@@ -164,7 +164,7 @@ async def linkedin(ctx, action = None, link = None):
     LINKEDIN_CHANNEL = client.get_channel(LINKEDIN_ID)
 
     messages = await LINKEDIN_CHANNEL.history(limit=200).flatten()
-    
+
     if action == None:
         fail = discord.Embed(title="Please add an action for command!", description=f"**Try:** {BOT_PREFIX}help", color=FAIL_COLOR)
         await ctx.send(embed=fail)
@@ -174,18 +174,18 @@ async def linkedin(ctx, action = None, link = None):
         if link == None:
             fail = discord.Embed(title="Please add an account!", description=f"**Try:** {BOT_PREFIX}help", color=FAIL_COLOR)
             await ctx.send(embed=fail)
-            return 
+            return
 
         for msg in messages:
             if author in str(msg.content):
                 fail = discord.Embed(title="You already have a LinkedIn account.", description=f":mag_right: LinkedIn channel", color=FAIL_COLOR)
                 await ctx.send(embed=fail)
                 return
-        
+
         await LINKEDIN_CHANNEL.send(f"[{ctx.author.mention}]({link})")
-        
+
         success_add = discord.Embed(title="LinkedIn account successfully added!", description=":mag_right: LinkedIn channel", color=SUCCESS_COLOR)
-        
+
         await ctx.send(embed=success_add)
 
     elif action == "del":
@@ -194,8 +194,8 @@ async def linkedin(ctx, action = None, link = None):
                 success_del = discord.Embed(title="LinkedIn account successfully deleted!", description=":mag_right: LinkedIn channel", color=SUCCESS_COLOR)
                 await ctx.send(embed=success_del)
                 await msg.delete()
-                return 
-        
+                return
+
         fail_del = discord.Embed(title="You don't have a LinkedIn account!", description=":mag_right: LinkedIn channel", color=FAIL_COLOR)
         await ctx.send(embed=fail_del)
 
@@ -248,7 +248,7 @@ async def clear(ctx, limit=200):
 async def welcome(ctx):
     member = ctx.author
 
-    welcome_message = discord.Embed(title=":coffee: Grab a cup of coffee and start coding...", description=":mag_right: **Hint:** try &help", color=BLACK_COLOR)    
+    welcome_message = discord.Embed(title=":coffee: Grab a cup of coffee and start coding...", description=":mag_right: **Hint:** try &help", color=BLACK_COLOR)
     await ctx.send(f"Welcome, {member.mention}", embed = welcome_message)
 
 """
